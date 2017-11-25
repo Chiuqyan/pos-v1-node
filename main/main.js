@@ -60,7 +60,8 @@ function checkpromotion (calculate_res){
             if(item.barcode===promotion)
             {
                 item.giftnum=parseFloat(item.count/2.0);
-                item.giftvalue=item.giftnum*item.price; 
+                item.giftvalue=item.giftnum*item.price;
+                item.money-=item.giftvalue; 
                 promotioncount.push(item);
             }
 
