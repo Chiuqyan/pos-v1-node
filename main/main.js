@@ -8,10 +8,8 @@ module.exports = {
 
 module.exports = function printInventory(Bar_code) { 
     let calculate_res=calculate(Bar_code);
-    checkpromotion(calculate_res);
-
-
-
+    let promotioncount=checkpromotion(calculate_res);
+    printer(calculate_res,promotioncount);
 };
 function calculate(Bar_code){
     let res=[];
