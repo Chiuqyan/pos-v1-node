@@ -79,14 +79,14 @@ function printer(calculate_res,promotioncount){
     {
         save+=item.giftvalue;
     }
-    console.log('***<没钱赚商店>购物清单***\n')
+    console.log('***<没钱赚商店>购物清单***')
     for(let item of calculate_res)
     {
-        console.log('名称：'+item.name+'，数量：'+item.count+item.unit+'，单价：'+item.price.toFixed(2)+'(元)，小计：'+item.money.toFixed(2)+'(元)\n');
+        console.log('名称：'+item.name+'，数量：'+item.count+item.unit+'，单价：'+item.price.toFixed(2)+'(元)，小计：'+item.money.toFixed(2)+'(元)');
     }
-    console.log('----------------------\n'+'挥泪赠送商品：\n');
+    console.log('----------------------\n'+'挥泪赠送商品：');
     for(let item in promotioncount){
-        console.log('名称：'+item.name+'，数量：'+item.count+item.unit+'\n');
+        console.log('名称：'+item.name+'，数量：'+item.count+item.unit);
     }
     console.log('----------------------\n'+'总计：'+total.toFixed(2)+'(元)\n'+'节省：'+save.toFixed(2)+'(元)\n'+'**********************')
 
