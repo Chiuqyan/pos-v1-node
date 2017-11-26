@@ -1,7 +1,6 @@
 const database = require("../main/datbase");
 
 
-
 module.exports = {
     printInventory
 };
