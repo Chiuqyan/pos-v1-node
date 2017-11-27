@@ -1,7 +1,6 @@
 const database = require("../main/datbase");
 
 
-
 module.exports = {
     printInventory
 };
@@ -23,32 +22,33 @@ function calculate(Bar_code){
         {//the bar-code include quantity
             codes=code.split("-");
             if(item.barcode===codes[0]){//get the information of the item
-            for(let object in res){
-                if (object.barcode===codes[0]){//find the item has existed in the res
-                object.count+=codes[1];
-                } 
-                item.count+=codes[1];
+            if(res.barcode.indexOf(item.barcode)===-1)
+                {//find the item has not existed in the res
+                item.count=codes[1];
                 res.push(item);
+                } 
+                else res.barcode[indexOf(codes[0])].count+=codes[1];
+                
             }
-            res.barcode[indexOf(codes[0])].count+=codes[1];
         }
-    }
+    
         else{
             if(code === item.barcode){
-                for(let object in res){
-                    if (object.barcode===code){//find the item has existed in the res
-                    object.count++;
+                if(res.barcode.indexOf(code)===-1){
+                    //find the item has not existed in the res
+                    item.count=1;
+                    res.push(item);
                     } 
                     else{
-                        item.count=1;
-                        res.push(item);
+                        res.barcode[indexOf(code)].count++;
+                        
                     }
                 }
+                
             }
+        }
     }
-    
-}
-}
+
     for(let item of res)//original
     {
         item.money=parseFloat(item.count)*item.price;
@@ -58,6 +58,7 @@ function calculate(Bar_code){
 function checkpromotion (calculate_res){
     let promotions=database.loadPromotions();
     let promotioncount=[];
+if(promotions.type==="BUY_TWO_GET_ONE_FREE"){
     for(let promotion of promotions.barcodes)
     {
         for (let item of calculate_res)
@@ -72,6 +73,7 @@ function checkpromotion (calculate_res){
 
         }
     }
+}
     return promotioncount;
 }
 function printer(calculate_res,promotioncount){
