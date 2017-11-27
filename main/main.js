@@ -18,32 +18,37 @@ function calculate(Bar_code){
     {
         for(let item of items)
         {
-        if(code.length>11){//the bar-code include quantity
-        codes=code.split("-");
-        if(item.barcode===codes[0]){//get the information of the item
-        if (res.barcode.indexOf(codes[0])===-1){// whether the item has existed in the res
-            let object=item;
-            object.count+=codes[1];
-            res.push(object);
-        }
+        if(code.length>11)
+        {//the bar-code include quantity
+            codes=code.split("-");
+            if(item.barcode===codes[0]){//get the information of the item
+            for(let object in res){
+                if (object.barcode===codes[0]){//find the item has existed in the res
+                object.count+=codes[1];
+                } 
+                item.count+=codes[1];
+                res.push(item);
+            }
             res.barcode[indexOf(codes[0])].count+=codes[1];
         }
     }
         else{
-            if(item.barcode===code){
-                if (res.barcode.indexOf(code)===-1){// whether the item has existed in the res
-                    let object=item;
-                    object.count=1;
-                    res.push(object);
+            if(code === item.barcode){
+                for(let object in res){
+                    if (object.barcode===code){//find the item has existed in the res
+                    object.count++;
+                    } 
+                    else{
+                        item.count=1;
+                        res.push(item);
+                    }
                 }
-                res.barcode[indexOf(code)].count++;
-
             }
     }
     
 }
 }
-    for(item of res)
+    for(let item of res)//original
     {
         item.money=parseFloat(item.count)*item.price;
     }

@@ -1,5 +1,5 @@
-const main = require('../main/main');
-const database = require('../main/datbase');
+const main = require("../main/main");
+const database = require("../main/datbase");
 
 
 describe('pos', function () {
