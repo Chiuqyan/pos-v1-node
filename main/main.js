@@ -5,7 +5,7 @@ module.exports = {
     printInventory
 };
 
-module.exports = function printInventory(Bar_code) { 
+function printInventory(Bar_code) { 
     let calculate_res=calculate(Bar_code);
     let promotioncount=checkpromotion(calculate_res);
     printer(calculate_res,promotioncount);
@@ -18,41 +18,45 @@ function calculate(Bar_code){
     {
         for(let item of items)
         {
-        if(code.length>11)
-        {//the bar-code include quantity
-            codes=code.split("-");
-            if(item.barcode===codes[0]){//get the information of the item
-            if(res.barcode.indexOf(item.barcode)===-1)
-                {//find the item has not existed in the res
-                item.count=codes[1];
-                res.push(item);
-                } 
-                else res.barcode[indexOf(codes[0])].count+=codes[1];
+            if(code.length>11)
+            {//the bar-code include quantity
+                codes=code.split("-");
+                if(item.barcode===codes[0]){//get the information of the item
+                for(let object in res){
+                    if (object.barcode===codes[0]){//find the item has existed in the res
+                    object.count+=codes[1];
+                    } 
+
+                    else {item.count+=codes[1];
+                    res.push(item);}
+                }
+               
                 
             }
         }
     
         else{
             if(code === item.barcode){
-                if(res.barcode.indexOf(code)===-1){
-                    //find the item has not existed in the res
-                    item.count=1;
-                    res.push(item);
+                for(let object in res){
+                    if (object.barcode===code){//find the item has existed in the res
+                    object.count++;
                     } 
                     else{
-                        res.barcode[indexOf(code)].count++;
-                        
+                        item.count=1;
+                        res.push(item);
                     }
-                }
                 
             }
         }
+    }
+}
     }
 
     for(let item of res)//original
     {
         item.money=parseFloat(item.count)*item.price;
     }
+    //console.log(res);
     return res;
 }
 function checkpromotion (calculate_res){
