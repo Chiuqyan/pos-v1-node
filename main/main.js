@@ -5,7 +5,7 @@ module.exports = {
     printInventory
 };
 
-function printInventory(Bar_code) { 
+module.exports = function printInventory(Bar_code) { 
     let calculate_res=calculate(Bar_code);
     let promotioncount=checkpromotion(calculate_res);
     printer(calculate_res,promotioncount);
