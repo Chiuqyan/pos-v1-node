@@ -2,11 +2,11 @@ const main = require("../main/main");
 const database = require("../main/datbase");
 
 
-describe('pos', function () {
+describe('pos', function() {
     var allItems;
     var inputs;
 
-    beforeEach(function () {
+    beforeEach(function() {
         allItems = database.loadAllItems();
         inputs = [
             'ITEM000001',
@@ -21,7 +21,7 @@ describe('pos', function () {
         ];
     });
 
-    it('should print correct text', function () {
+    it('should print correct text', function() {
 
         spyOn(console, 'log');
 
