@@ -7,37 +7,35 @@ module.exports = {
 
 function printInventory(inputs) {
 
-    let item = countItem(inputs);
-    let itemA = Price(item);
-    let gift = gifts(itemA);
-    let list = printer(itemA, gift);
-    console.log(list);
+    let item = count(inputs);
+    let gift = gifts(item);
+    let res = printer(item, gift);
+    console.log(res);
+
 }
 
-
-function splitcode(code) {
+function splitcode(str) {
     let result = [];
-    if (code.indexOf("-") != -1) {
-        let result = code.split("-");
+    if (str.indexOf("-") != -1) {
+        result = str.split("-");
     } else {
-        result.push(code);
+        result.push(str);
         result.push(1);
     }
     return result;
 }
 
-// 
-function countItem(item) {
-    var res = [];
-    var flag = false;
-    var result;
+function count(item) {
+    let res = [];
+    let flag = false;
+    let result;
     for (let itemA of item) {
         flag = false;
         result = splitcode(itemA);
 
-        for (let itemB of res) {
-            if (itemB.barcode === result[0]) {
-                itemB.count += result[1];
+        for (let items of res) {
+            if (items.barcode === result[0]) {
+                items.count += result[1];
                 flag = true;
                 break;
             }
@@ -46,27 +44,26 @@ function countItem(item) {
             res.push({ barcode: result[0], count: result[1] });
         }
     }
-    let itemlist = database.loadAllItems();
+    let list = database.loadAllItems();
 
-    for (let itemA of item) {
-        for (let itemB of itemlist) {
+    for (let itemA of res) {
+        for (let itemB of list) {
             if (itemA.barcode === itemB.barcode) {
                 itemA.name = itemB.name;
                 itemA.unit = itemB.unit;
                 itemA.price = itemB.price;
-
+                itemA.total = promotionreduce(itemA);
             }
         }
     }
     return res;
 }
 
-function promotionreduce(item) //reduce
-{
-    let itemlist = database.loadPromotions();
+function promotionreduce(item) {
+    let list = database.loadPromotions();
     let num;
     let total;
-    for (let itemA of itemlist) {
+    for (let itemA of list) {
         if (itemA.type === "BUY_TWO_GET_ONE_FREE") {
             if (itemA.barcodes.indexOf(item.barcode) != -1)
                 num = item.count - parseInt(item.count / 3);
@@ -76,18 +73,6 @@ function promotionreduce(item) //reduce
         total = num * item.price;
     }
     return total;
-}
-
-function Price(item) {
-    let itemlist = database.loadAllItems();
-    for (let itemA of item) {
-        for (let itemB of itemlist) {
-            if (itemA.barcode === itemB.barcode) {
-                itemA.total = promotionreduce(itemA);
-            }
-        }
-    }
-    return item;
 }
 
 function gifts(item) {
@@ -114,24 +99,24 @@ function printlistb(item) {
     return res;
 }
 
-function printer(item, gifts) {
-    let list = `***<没钱赚商店>购物清单***\n`;
+function printer(items, gifts) {
+    let res = `***<没钱赚商店>购物清单***\n`;
     let sum = 0;
     let save = 0;
 
-    for (let Item of item) {
-        list += printlista(Item);
-        sum += Item.subtotal;
+    for (let item of items) {
+        res += printlista(item);
+        sum += item.total;
     }
-    list += `----------------------\n` + `挥泪赠送商品：\n`;
+    res += `----------------------\n` + `挥泪赠送商品：\n`;
     for (let gift of gifts) {
         res += printlistb(gift);
         save += gift.count * gift.price;
     }
-    list += `----------------------\n`;
-    list += `总计：` + String(sum.toFixed(2)) + `(元)\n`;
-    list += `节省：` + String(save.toFixed(2)) + `(元)\n`;
-    list += `**********************`;
+    res += `----------------------\n`;
+    res += `总计：` + String(sum.toFixed(2)) + `(元)\n`;
+    res += `节省：` + String(save.toFixed(2)) + `(元)\n`;
+    res += `**********************`;
 
-    return list;
+    return res;
 }
